@@ -24,5 +24,5 @@ async def main():
     help="Comma-separated list of tags for the article. Could be in the form of 'tag1,tag2,tag3' or just 'tag1'",
 )
 @utils.make_sync
-async def add():
-    pass
+async def add(url: str, category: str, tags: str):
+    main_category, subcategory = utils.get_categories(category)
