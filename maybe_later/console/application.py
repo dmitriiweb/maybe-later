@@ -26,3 +26,4 @@ async def main():
 @utils.make_sync
 async def add(url: str, category: str, tags: str):
     main_category, subcategory = utils.get_categories(category)
+    article_tags = utils.get_tags(tags)

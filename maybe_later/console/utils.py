@@ -1,7 +1,7 @@
 import asyncio
 import functools
 
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 
 def make_sync(func):
@@ -22,3 +22,10 @@ def get_categories(raw_categories: str) -> Tuple[Optional[str], Optional[str]]:
     elif total_cats == 1:
         return filtered_cats[0], None
     return filtered_cats[0], filtered_cats[1]
+
+
+def get_tags(raw_tags: str) -> List[str]:
+    tags = raw_tags.split(",")
+    filtered_tags = [tag.strip() for tag in tags]
+    filtered_tags = [i for i in filtered_tags if i != ""]
+    return filtered_tags
