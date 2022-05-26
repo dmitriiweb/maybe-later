@@ -12,6 +12,11 @@ BASEDIR = Path(__file__).resolve().parent.parent
 class Config:
     data_dir: Path
 
+    @property
+    def sqlite_uri(self) -> str:
+        sqlite_path = str(self.data_dir.joinpath("db.sqlite").absolute())
+        return f"sqlite+aiosqlite:///{sqlite_path}"
+
     @classmethod
     def from_file(cls, config_file_path: Optional[Path] = None):
         if config_file_path is None:
