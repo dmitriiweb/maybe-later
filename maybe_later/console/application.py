@@ -38,6 +38,6 @@ async def main():
 async def add(url: str, category: str, tags: str, save_images: bool):
     main_category, subcategory = utils.get_categories(category)
     article_tags = utils.get_tags(tags)
-    article = await get_article(
+    _ = await get_article(
         url, category=main_category, subcategory=subcategory, tags=article_tags
     )
