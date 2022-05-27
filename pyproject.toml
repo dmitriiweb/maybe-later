@@ -3,6 +3,7 @@ name = "maybe-later"
 version = "0.1.0"
 description = ""
 authors = ["Dmitrii Kurlov <dmitriik@protonmail.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
