@@ -10,6 +10,7 @@ from . import models
 async def get_article(
     url: str, category: Optional[str], subcategory: Optional[str], tags: List[str]
 ) -> models.Article:
+    print(f"Getting article from URL: {url}")
     async with httpx.AsyncClient() as client:
         response = await client.get(
             url, headers={"User-Agent": "Maybe-Later: tools for saving articles"}
