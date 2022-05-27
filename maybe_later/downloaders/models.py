@@ -6,6 +6,7 @@ from typing import List, Optional
 class Article:
     title: str
     text: str
+    article_html: str
     source: str
     category: Optional[str]
     subcategory: Optional[str]

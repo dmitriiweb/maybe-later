@@ -2,7 +2,7 @@ from typing import List, Optional
 
 import httpx
 
-from newspaper import Article
+from newspaper import Article, Config
 
 from . import models
 
@@ -14,7 +14,10 @@ async def get_article(
         response = await client.get(
             url, headers={"User-Agent": "Maybe-Later: tools for saving articles"}
         )
-        article = Article(url)
+        conf = Config()
+        conf.fetch_images = True
+        conf.keep_article_html = True
+        article = Article(url, config=conf)
         article.set_html(response.text)
         article.parse()
         return models.Article(
@@ -24,4 +27,5 @@ async def get_article(
             category=category,
             subcategory=subcategory,
             tags=tags,
+            article_html=article.article_html,
         )
