@@ -1,5 +1,7 @@
 import click
 
+from maybe_later.downloaders import get_article
+
 from . import utils
 
 
@@ -36,4 +38,6 @@ async def main():
 async def add(url: str, category: str, tags: str, save_images: bool):
     main_category, subcategory = utils.get_categories(category)
     article_tags = utils.get_tags(tags)
-    print(save_images)
+    article = await get_article(
+        url, category=main_category, subcategory=subcategory, tags=article_tags
+    )

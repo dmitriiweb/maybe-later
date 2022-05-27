@@ -6,6 +6,10 @@ test:
 	black maybe_later tests/
 	isort maybe_later tests/
 
+.PHONY: mypy
+mypy:
+	mypy maybe_later --implicit-reexport
+
 .PHONY: publish
 publish:
 	poetry build
