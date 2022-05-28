@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from maybe_later import Config, models
-from maybe_later.savers.article_savers import ArticleMdSaver
+from maybe_later.savers import ArticleMdSaver
 
 
 @pytest.fixture
