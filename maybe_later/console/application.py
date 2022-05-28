@@ -4,7 +4,7 @@ import click
 
 from maybe_later.config import Config
 from maybe_later.downloaders import get_article
-from maybe_later.savers.article_savers import ArticleMdSaver as ArticleSaver
+from maybe_later.savers import ArticleMdSaver as ArticleSaver
 
 from . import utils
 
@@ -41,5 +41,7 @@ async def add(url: str, category: str, tags: str):
     app_config = Config.from_file()
     article_saver = ArticleSaver(article, app_config)
 
-    saving_tasks = [article_saver.save()]
-    await asyncio.gather(*saving_tasks)
+    saving_tasks = [article_saver.save(), article_saver.save_meta()]
+    res = await asyncio.gather(*saving_tasks)
+    print(40 * ">")
+    print(res)
