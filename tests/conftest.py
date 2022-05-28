@@ -12,6 +12,13 @@ def base_dir() -> Path:
 
 
 @pytest.fixture()
+def article_html(base_dir: Path) -> str:
+    html_file = base_dir.joinpath("data_files_for_tests", "article.html")
+    with open(html_file) as f:
+        return f.read()
+
+
+@pytest.fixture()
 def config(base_dir: Path) -> Config:
     config_file = base_dir.joinpath("test_config.yaml")
     return Config.from_file(config_file)

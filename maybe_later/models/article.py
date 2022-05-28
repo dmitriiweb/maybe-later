@@ -11,3 +11,6 @@ class Article:
     category: Optional[str]
     subcategory: Optional[str]
     tags: List[str] = field(default_factory=list)
+
+    def to_markdown(self) -> str:
+        pass
