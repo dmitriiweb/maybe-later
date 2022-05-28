@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import aiofiles
+
 from .article_saver import ArticleSaver
 
 
@@ -14,5 +16,11 @@ class ArticleMdSaver(ArticleSaver):
         folder_path = folder_path.joinpath(self.article.title)
         return folder_path
 
+    @property
+    def md_file_path(self) -> Path:
+        return self.folder_path.joinpath(self.article.title + ".md")
+
     async def save(self) -> None:
-        pass
+        self.folder_path.mkdir(parents=True, exist_ok=True)
+        async with aiofiles.open(self.md_file_path, "w") as f:
+            await f.write(self.article.to_markdown())
