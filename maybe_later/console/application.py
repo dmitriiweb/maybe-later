@@ -27,13 +27,6 @@ async def main():
     type=str,
     help="Comma-separated list of tags for the article. Could be in the form of 'tag1,tag2,tag3' or just 'tag1'",
 )
-@click.option(
-    "--save-images",
-    type=bool,
-    is_flag=True,
-    default=False,
-    help="Save images locally or not",
-)
 @utils.make_sync
 async def add(url: str, category: str, tags: str, save_images: bool):
     main_category, subcategory = utils.get_categories(category)
