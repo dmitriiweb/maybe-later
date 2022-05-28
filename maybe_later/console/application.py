@@ -1,6 +1,10 @@
+import asyncio
+
 import click
 
+from maybe_later.config import Config
 from maybe_later.downloaders import get_article
+from maybe_later.savers.article_savers import ArticleMdSaver as ArticleSaver
 
 from . import utils
 
@@ -27,17 +31,15 @@ async def main():
     type=str,
     help="Comma-separated list of tags for the article. Could be in the form of 'tag1,tag2,tag3' or just 'tag1'",
 )
-@click.option(
-    "--save-images",
-    type=bool,
-    is_flag=True,
-    default=False,
-    help="Save images locally or not",
-)
 @utils.make_sync
-async def add(url: str, category: str, tags: str, save_images: bool):
+async def add(url: str, category: str, tags: str):
     main_category, subcategory = utils.get_categories(category)
     article_tags = utils.get_tags(tags)
-    _ = await get_article(
+    article = await get_article(
         url, category=main_category, subcategory=subcategory, tags=article_tags
     )
+    app_config = Config.from_file()
+    article_saver = ArticleSaver(article, app_config)
+
+    saving_tasks = [article_saver.save()]
+    await asyncio.gather(*saving_tasks)

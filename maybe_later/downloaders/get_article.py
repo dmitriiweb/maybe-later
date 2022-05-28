@@ -4,7 +4,7 @@ import httpx
 
 from newspaper import Article, Config
 
-from . import models
+from maybe_later import models
 
 
 async def get_article(
