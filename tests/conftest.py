@@ -25,7 +25,7 @@ def config(base_dir: Path) -> Config:
 
 
 @pytest.fixture()
-def article() -> models.Article:
+def article(article_html: str) -> models.Article:
     return models.Article(
         title="Test title",
         text="Test text",
@@ -33,7 +33,7 @@ def article() -> models.Article:
         category="Test category",
         subcategory="Test subcategory",
         tags=["Test tag"],
-        article_html="Test article html",
+        article_html=article_html,
     )
 
 
