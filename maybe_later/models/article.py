@@ -22,5 +22,5 @@ class Article:
 
     def to_markdown(self) -> str:
         text = md(self.article_html)
-        text_with_title = f"# {self.title}\n\n{text}"
-        return text_with_title
+        text_with_meta = f"# {self.title}\n**Source:** {self.source}\n\n{text}"
+        return text_with_meta
