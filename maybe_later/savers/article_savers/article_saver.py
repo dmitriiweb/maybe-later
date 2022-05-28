@@ -9,5 +9,5 @@ class ArticleSaver(ABC):
         self.app_config = app_config
 
     @abstractmethod
-    def save(self) -> None:
+    async def save(self) -> None:
         ...

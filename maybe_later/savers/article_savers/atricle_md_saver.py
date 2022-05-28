@@ -14,5 +14,5 @@ class ArticleMdSaver(ArticleSaver):
         folder_path = folder_path.joinpath(self.article.title)
         return folder_path
 
-    def save(self) -> None:
+    async def save(self) -> None:
         pass
