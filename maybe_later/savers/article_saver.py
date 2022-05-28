@@ -11,3 +11,7 @@ class ArticleSaver(ABC):
     @abstractmethod
     async def save(self) -> None:
         ...
+
+    @abstractmethod
+    async def save_meta(self) -> None:
+        ...
