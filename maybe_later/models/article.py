@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import List, Optional
 
+from markdownify import markdownify as md
+
 
 class ArticleStatus(Enum):
     NEW = auto()
@@ -19,4 +21,6 @@ class Article:
     status: ArticleStatus = ArticleStatus.NEW
 
     def to_markdown(self) -> str:
-        pass
+        text = md(self.article_html)
+        text_with_title = f"# {self.title}\n\n{text}"
+        return text_with_title
