@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import AsyncGenerator, List, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -52,7 +53,7 @@ class SubCategory(SQLModel, table=True):
 
 class Category(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
-    name: str
+    name: str = Field(sa_column_kwargs={"unique": True})
 
     subcategories: List[SubCategory] = Relationship(
         back_populates="category",
@@ -75,6 +76,7 @@ class Meta(SQLModel, table=True):
         sa_relationship_kwargs={"lazy": "joined", "uselist": False},
     )
     tags: List[Tag] = Relationship(back_populates="metas", link_model=MetaTagLink)
+    created_at: Optional[datetime]
 
 
 async def init_db(db_url: str) -> None:
@@ -87,4 +89,4 @@ async def get_session(db_url: str) -> AsyncGenerator[AsyncSession, None]:
     engine = create_async_engine(db_url)
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
-        yield session
+        return session
