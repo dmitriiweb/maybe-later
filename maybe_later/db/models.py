@@ -24,9 +24,18 @@ class Category(SQLModel, table=True):
     meta: Optional["Meta"] = Relationship(back_populates="category")
 
 
+class MetaTagLink(SQLModel, table=True):
+    tag_id: Optional[int] = Field(default=None, foreign_key="tag.id", primary_key=True)
+    meta_id: Optional[int] = Field(
+        default=None, foreign_key="meta.id", primary_key=True
+    )
+
+
 class Tag(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     name: str = Field(sa_column_kwargs={"unique": True})
+
+    metas: List["Meta"] = Relationship(back_populates="tags", link_model=MetaTagLink)
 
 
 class Meta(SQLModel, table=True):
@@ -37,3 +46,4 @@ class Meta(SQLModel, table=True):
         back_populates="meta",
         sa_relationship_kwargs={"lazy": "joined", "uselist": False},
     )
+    tags: List[Tag] = Relationship(back_populates="metas", link_model=MetaTagLink)
