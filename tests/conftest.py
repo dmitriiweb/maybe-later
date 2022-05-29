@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from maybe_later import Config, models
-from maybe_later.savers import ArticleMdSaver
+from maybe_later import Config
+from maybe_later.savers import ArticleMdSaver, ArticleModel
 
 
 @pytest.fixture
@@ -25,8 +25,8 @@ def config(base_dir: Path) -> Config:
 
 
 @pytest.fixture()
-def article(article_html: str) -> models.Article:
-    return models.Article(
+def article(article_html: str) -> ArticleModel:
+    return ArticleModel(
         title="Test title",
         text="Test text",
         source="Test source",
@@ -38,5 +38,5 @@ def article(article_html: str) -> models.Article:
 
 
 @pytest.fixture()
-def article_md_saver(article: models.Article, config: Config) -> ArticleMdSaver:
+def article_md_saver(article: ArticleModel, config: Config) -> ArticleMdSaver:
     return ArticleMdSaver(article, config)

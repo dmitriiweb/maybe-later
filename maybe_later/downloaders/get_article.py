@@ -4,12 +4,12 @@ import httpx
 
 from newspaper import Article, Config
 
-from maybe_later import models
+from maybe_later.savers import models
 
 
 async def get_article(
     url: str, category: Optional[str], subcategory: Optional[str], tags: List[str]
-) -> models.Article:
+) -> models.ArticleModel:
     print(f"Getting article from URL: {url}")
     async with httpx.AsyncClient() as client:
         response = await client.get(
@@ -21,7 +21,7 @@ async def get_article(
         article = Article(url, config=conf)
         article.set_html(response.text)
         article.parse()
-        return models.Article(
+        return models.ArticleModel(
             title=article.title,
             text=article.text,
             source=url,

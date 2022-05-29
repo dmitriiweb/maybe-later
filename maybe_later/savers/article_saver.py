@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
-from maybe_later import config, models
+from maybe_later import config
+
+from . import models
 
 
 class ArticleSaver(ABC):
-    def __init__(self, article: models.Article, app_config: config.Config) -> None:
+    def __init__(self, article: models.ArticleModel, app_config: config.Config) -> None:
         self.article = article
         self.app_config = app_config
 

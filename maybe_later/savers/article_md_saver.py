@@ -26,4 +26,4 @@ class ArticleMdSaver(ArticleSaver):
             await f.write(self.article.to_markdown())
 
     async def save_meta(self) -> None:
-        return "meta"
+        return

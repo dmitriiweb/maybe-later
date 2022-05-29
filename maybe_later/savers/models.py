@@ -10,7 +10,7 @@ class ArticleStatus(Enum):
 
 
 @dataclass
-class Article:
+class ArticleModel:
     title: str
     text: str
     article_html: str
