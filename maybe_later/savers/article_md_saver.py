@@ -32,14 +32,6 @@ class ArticleMdSaver(ArticleSaver):
             await f.write(self.article.to_markdown())
 
     async def save_meta(self) -> None:
-        meta = {
-            "title": self.article.meta.title,
-            "source": self.article.meta.source,
-            "category": self.article.meta.category,
-            "subcategory": self.article.meta.subcategory,
-            "tags": self.article.meta.tags,
-            "status": self.article.meta.status.value,
-        }
-        meta_json = json.dumps(meta)
+        meta_json = json.dumps(self.article.meta.to_dict())
         async with aiofiles.open(self.meta_file_path, "w") as f:
             await f.write(meta_json)

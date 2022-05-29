@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from markdownify import markdownify as md
 
@@ -14,6 +14,16 @@ class MetaModel:
     subcategory: Optional[str]
     tags: List[str] = field(default_factory=list)
     status: ArticleStatus = ArticleStatus.UNREAD
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "title": self.title,
+            "source": self.source,
+            "category": self.category,
+            "subcategory": self.subcategory,
+            "tags": self.tags,
+            "status": self.status.value,
+        }
 
 
 @dataclass
