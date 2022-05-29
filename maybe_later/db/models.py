@@ -17,6 +17,13 @@ class MetaCategoryLink(SQLModel, table=True):
     )
 
 
+class MetaSubCategoryLink(SQLModel, table=True):
+    tag_id: Optional[int] = Field(default=None, foreign_key="tag.id", primary_key=True)
+    subcategory_id: Optional[int] = Field(
+        default=None, foreign_key="sub_category.id", primary_key=True
+    )
+
+
 class Tag(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     name: str = Field(sa_column_kwargs={"unique": True})
@@ -24,6 +31,9 @@ class Tag(SQLModel, table=True):
     metas: List["Meta"] = Relationship(back_populates="tags", link_model=MetaTagLink)
     categories: List["Category"] = Relationship(
         back_populates="tags", link_model=MetaCategoryLink
+    )
+    subcategories: List["SubCategory"] = Relationship(
+        back_populates="tags", link_model=MetaSubCategoryLink
     )
 
 
@@ -33,6 +43,9 @@ class SubCategory(SQLModel, table=True):
 
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
     category: Optional["Category"] = Relationship(back_populates="subcategories")
+    tags: List[Tag] = Relationship(
+        back_populates="subcategories", link_model=MetaSubCategoryLink
+    )
 
 
 class Category(SQLModel, table=True):
