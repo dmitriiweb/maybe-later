@@ -42,6 +42,4 @@ async def add(url: str, category: str, tags: str):
     article_saver = ArticleSaver(article, app_config)
 
     saving_tasks = [article_saver.save(), article_saver.save_meta()]
-    res = await asyncio.gather(*saving_tasks)
-    print(40 * ">")
-    print(res)
+    await asyncio.gather(*saving_tasks)
