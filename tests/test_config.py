@@ -7,5 +7,5 @@ def test_data_folder(config: Config):
 
 
 def test_sqlite_uri(config: Config):
-    assert config.sqlite_uri.startswith("sqlite+aiosqlite:///")
-    assert config.sqlite_uri.endswith("db.sqlite")
+    assert config.db_uri.startswith("sqlite+aiosqlite:///")
+    assert config.db_uri.endswith("db.sqlite")
