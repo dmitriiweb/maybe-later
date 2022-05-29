@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from maybe_later import Config
-from maybe_later.savers import ArticleMdSaver, ArticleModel
+from maybe_later.savers import ArticleMdSaver, ArticleModel, MetaModel
 
 
 @pytest.fixture
@@ -26,15 +26,14 @@ def config(base_dir: Path) -> Config:
 
 @pytest.fixture()
 def article(article_html: str) -> ArticleModel:
-    return ArticleModel(
+    meta = MetaModel(
         title="Test title",
-        text="Test text",
         source="Test source",
         category="Test category",
         subcategory="Test subcategory",
         tags=["Test tag"],
-        article_html=article_html,
     )
+    return ArticleModel(text="Test text", article_html=article_html, meta=meta)
 
 
 @pytest.fixture()
