@@ -1,12 +1,9 @@
 from dataclasses import dataclass, field
-from enum import Enum, auto
 from typing import List, Optional
 
 from markdownify import markdownify as md
 
-
-class ArticleStatus(Enum):
-    NEW = auto()
+from maybe_later._types import ArticleStatus
 
 
 @dataclass
@@ -18,7 +15,7 @@ class ArticleModel:
     category: Optional[str]
     subcategory: Optional[str]
     tags: List[str] = field(default_factory=list)
-    status: ArticleStatus = ArticleStatus.NEW
+    status: ArticleStatus = ArticleStatus.UNREAD
 
     def to_markdown(self) -> str:
         text = md(self.article_html)
