@@ -1,5 +1,7 @@
-from typing import List, Optional
+from typing import AsyncGenerator, List, Optional
 
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -20,7 +22,7 @@ class MetaCategoryLink(SQLModel, table=True):
 class MetaSubCategoryLink(SQLModel, table=True):
     tag_id: Optional[int] = Field(default=None, foreign_key="tag.id", primary_key=True)
     subcategory_id: Optional[int] = Field(
-        default=None, foreign_key="sub_category.id", primary_key=True
+        default=None, foreign_key="subcategory.id", primary_key=True
     )
 
 
@@ -73,3 +75,16 @@ class Meta(SQLModel, table=True):
         sa_relationship_kwargs={"lazy": "joined", "uselist": False},
     )
     tags: List[Tag] = Relationship(back_populates="metas", link_model=MetaTagLink)
+
+
+async def init_db(db_url: str) -> None:
+    engine = create_async_engine(db_url)
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
+
+
+async def get_session(db_url: str) -> AsyncGenerator[AsyncSession, None]:
+    engine = create_async_engine(db_url)
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        yield session
