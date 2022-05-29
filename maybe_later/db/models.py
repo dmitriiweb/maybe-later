@@ -26,7 +26,7 @@ class Category(SQLModel, table=True):
 
 class Tag(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
-    name: str
+    name: str = Field(sa_column_kwargs={"unique": True})
 
 
 class Meta(SQLModel, table=True):
