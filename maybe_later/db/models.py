@@ -13,14 +13,14 @@ class MetaTagLink(SQLModel, table=True):
     )
 
 
-class MetaCategoryLink(SQLModel, table=True):
+class TagCategoryLink(SQLModel, table=True):
     tag_id: Optional[int] = Field(default=None, foreign_key="tag.id", primary_key=True)
     category_id: Optional[int] = Field(
         default=None, foreign_key="category.id", primary_key=True
     )
 
 
-class MetaSubCategoryLink(SQLModel, table=True):
+class TagSubCategoryLink(SQLModel, table=True):
     tag_id: Optional[int] = Field(default=None, foreign_key="tag.id", primary_key=True)
     subcategory_id: Optional[int] = Field(
         default=None, foreign_key="subcategory.id", primary_key=True
@@ -33,10 +33,10 @@ class Tag(SQLModel, table=True):
 
     metas: List["Meta"] = Relationship(back_populates="tags", link_model=MetaTagLink)
     categories: List["Category"] = Relationship(
-        back_populates="tags", link_model=MetaCategoryLink
+        back_populates="tags", link_model=TagCategoryLink
     )
     subcategories: List["SubCategory"] = Relationship(
-        back_populates="tags", link_model=MetaSubCategoryLink
+        back_populates="tags", link_model=TagSubCategoryLink
     )
 
 
@@ -47,7 +47,7 @@ class SubCategory(SQLModel, table=True):
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
     category: Optional["Category"] = Relationship(back_populates="subcategories")
     tags: List[Tag] = Relationship(
-        back_populates="subcategories", link_model=MetaSubCategoryLink
+        back_populates="subcategories", link_model=TagSubCategoryLink
     )
 
 
@@ -63,7 +63,7 @@ class Category(SQLModel, table=True):
     meta_id: Optional[int] = Field(default=None, foreign_key="meta.id")
     meta: Optional["Meta"] = Relationship(back_populates="category")
     tags: List[Tag] = Relationship(
-        back_populates="categories", link_model=MetaCategoryLink
+        back_populates="categories", link_model=TagCategoryLink
     )
 
 
@@ -85,8 +85,5 @@ async def init_db(db_url: str) -> None:
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
-async def get_session(db_url: str) -> AsyncGenerator[AsyncSession, None]:
-    engine = create_async_engine(db_url)
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session() as session:
-        return session
+def get_engine(db_connection_string: str):
+    return create_async_engine(db_connection_string)

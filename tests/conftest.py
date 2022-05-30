@@ -3,6 +3,8 @@ from pathlib import Path
 import pytest
 
 from maybe_later import Config
+from maybe_later.db.models import init_db
+from maybe_later.db.services import add_new_meta
 from maybe_later.savers import ArticleMdSaver, ArticleModel, MetaModel
 
 
@@ -39,3 +41,17 @@ def article(article_html: str) -> ArticleModel:
 @pytest.fixture()
 def article_md_saver(article: ArticleModel, config: Config) -> ArticleMdSaver:
     return ArticleMdSaver(article, config)
+
+
+@pytest.fixture()
+async def add_new_meta_to_db(article: ArticleModel, config: Config, base_dir: Path):
+    db_file_name = "db.sqlite3"
+    fb_file_path = base_dir.joinpath(db_file_name)
+    config.data_dir = base_dir
+
+    await init_db(config.db_uri)
+    await add_new_meta(article.meta, config.db_uri)
+
+    yield
+
+    fb_file_path.unlink()
