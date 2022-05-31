@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 
 from maybe_later import Config
+from maybe_later.db.api import add_new_meta
 from maybe_later.db.models import init_db
-from maybe_later.db.services import add_new_meta
 from maybe_later.savers import ArticleMdSaver, ArticleModel, MetaModel
 
 
