@@ -9,7 +9,7 @@ async def test_add_new_meta(add_new_meta_to_db, base_dir):
     connection_string = f"sqlite+aiosqlite:///{sqlite_path}"
     engine = get_engine(connection_string)
 
-    with AsyncSession(engine) as session:
+    async with AsyncSession(engine) as session:
         stmt = select(Meta).where(Meta.id == 1)
         res = await session.execute(stmt)
         meta: Meta = res.first()
