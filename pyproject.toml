@@ -15,6 +15,7 @@ sqlmodel = "^0.0.6"
 aiosqlite = "^0.17.0"
 PyYAML = "^6.0"
 newspaper3k = "^0.2.8"
+SQLAlchemy = "1.4.35"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"

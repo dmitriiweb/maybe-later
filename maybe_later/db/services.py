@@ -21,9 +21,41 @@ async def add_new_meta(article_meta: ArticleMeta, db_uri: str):
     await models.init_db(db_uri)
     meta = None
     category = await get_category(article_meta.category, db_uri)
-    subcategory = None
+    category, subcategory = await get_subcategory(
+        category, article_meta.subcategory, db_uri
+    )
     tags = None
     print(category)
+    print(40 * "-")
+    print(subcategory)
+
+
+async def get_subcategory(
+    category: Optional[models.Category], sub_category_name: Optional[str], db_uri: str
+) -> Tuple[Optional[models.Category], Optional[models.SubCategory]]:
+    if sub_category_name is None or category is None:
+        return category, None
+    stmt = (
+        select(models.SubCategory)
+        .where(models.SubCategory.category_id == category.id)
+        .where(models.SubCategory.name == sub_category_name)
+    )
+    engine = models.get_engine(db_uri)
+    async with AsyncSession(engine) as session:
+        res = await session.execute(stmt)
+        subcategory = res.scalar()
+        if subcategory is not None:
+            return category, subcategory
+        subcategory = models.SubCategory(
+            name=sub_category_name, category_id=category.id
+        )
+        category.subcategories.append(subcategory)
+        session.add(subcategory)
+        session.add(category)
+        await session.commit()
+        await session.refresh(subcategory)
+        await session.refresh(category)
+    return category, subcategory
 
 
 async def get_category(
