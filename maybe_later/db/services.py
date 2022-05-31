@@ -21,9 +21,7 @@ async def add_new_meta(article_meta: ArticleMeta, db_uri: str):
     await models.init_db(db_uri)
     meta = None
     category = await get_category(article_meta.category, db_uri)
-    category, subcategory = await get_subcategory(
-        category, article_meta.subcategory, db_uri
-    )
+    subcategory = await get_subcategory(category, article_meta.subcategory, db_uri)
     tags = None
     print(category)
     print(40 * "-")
@@ -32,9 +30,9 @@ async def add_new_meta(article_meta: ArticleMeta, db_uri: str):
 
 async def get_subcategory(
     category: Optional[models.Category], sub_category_name: Optional[str], db_uri: str
-) -> Tuple[Optional[models.Category], Optional[models.SubCategory]]:
+) -> Optional[models.SubCategory]:
     if sub_category_name is None or category is None:
-        return category, None
+        return None
     stmt = (
         select(models.SubCategory)
         .where(models.SubCategory.category_id == category.id)
@@ -45,7 +43,7 @@ async def get_subcategory(
         res = await session.execute(stmt)
         subcategory = res.scalar()
         if subcategory is not None:
-            return category, subcategory
+            return subcategory
         subcategory = models.SubCategory(
             name=sub_category_name, category_id=category.id
         )
@@ -55,7 +53,7 @@ async def get_subcategory(
         await session.commit()
         await session.refresh(subcategory)
         await session.refresh(category)
-    return category, subcategory
+    return subcategory
 
 
 async def get_category(
