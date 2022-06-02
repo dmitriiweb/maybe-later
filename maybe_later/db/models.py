@@ -1,8 +1,6 @@
-from datetime import datetime
-from typing import AsyncGenerator, List, Optional
+from typing import List, Optional
 
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import Field, Relationship, SQLModel
 
 

@@ -1,8 +1,5 @@
 import asyncio
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from maybe_later.config import Config
 from maybe_later.savers import MetaModel as ArticleMeta
 
 from . import models, services
