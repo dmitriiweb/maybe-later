@@ -27,7 +27,14 @@ class MetaModel:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MetaModel":
-        return cls(**data)
+        return cls(
+            title=data["title"],
+            source=data["source"],
+            category=data["category"],
+            subcategory=data["subcategory"],
+            tags=data["tags"],
+            status=ArticleStatus(data["status"]),
+        )
 
 
 @dataclass

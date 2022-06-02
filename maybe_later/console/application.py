@@ -62,5 +62,5 @@ async def update():
     app_config.sqlite_db_path.unlink(missing_ok=True)
     metas = utils.get_metas_from_folders(app_config.data_dir)
     async for meta in metas:
-        print(meta)
-        print()
+        print(f"Updating: {meta.title}")
+        await api.add_new_meta(meta, app_config.db_uri),
