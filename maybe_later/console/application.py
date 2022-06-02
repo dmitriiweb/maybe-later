@@ -2,6 +2,8 @@ import asyncio
 
 import click
 
+from sqlalchemy.exc import IntegrityError
+
 from maybe_later.config import Config
 from maybe_later.db import api
 from maybe_later.downloaders import get_article
@@ -45,6 +47,9 @@ async def add(url: str, category: str, tags: str):
     saving_tasks = [
         article_saver.save(),
         article_saver.save_meta(),
-        api.add_new_meta(article.meta, app_config),
+        api.add_new_meta(article.meta, app_config.db_uri),
     ]
-    await asyncio.gather(*saving_tasks)
+    try:
+        await asyncio.gather(*saving_tasks)
+    except IntegrityError:
+        print(f'Article "{article.meta.title}" already exists in the database')

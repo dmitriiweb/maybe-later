@@ -4,6 +4,7 @@ import httpx
 
 from newspaper import Article, Config
 
+from maybe_later._types import ArticleStatus
 from maybe_later.savers import models
 
 
@@ -27,6 +28,7 @@ async def get_article(
             category=category,
             subcategory=subcategory,
             tags=tags,
+            status=ArticleStatus.UNREAD,
         )
         return models.ArticleModel(
             text=article.text,

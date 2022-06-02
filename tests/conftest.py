@@ -6,6 +6,7 @@ from maybe_later import Config
 from maybe_later.db.api import add_new_meta
 from maybe_later.db.models import init_db
 from maybe_later.savers import ArticleMdSaver, ArticleModel, MetaModel
+from maybe_later.savers.models import ArticleStatus
 
 
 @pytest.fixture
@@ -34,6 +35,7 @@ def article(article_html: str) -> ArticleModel:
         category="Test category",
         subcategory="Test subcategory",
         tags=["Test tag"],
+        status=ArticleStatus.UNREAD,
     )
     return ArticleModel(text="Test text", article_html=article_html, meta=meta)
 

@@ -1,3 +1,5 @@
+import asyncio
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from maybe_later.config import Config
@@ -8,14 +10,19 @@ from . import models, services
 
 async def add_new_meta(article_meta: ArticleMeta, db_uri: str):
     await models.init_db(db_uri)
-    engine = models.get_engine(db_uri)
-    async with AsyncSession(engine) as session:
-        meta = None
-        category = await services.get_category(article_meta.category, session)
-        subcategory = await services.get_subcategory(
-            category, article_meta.subcategory, session
-        )
-        tags = None
-        print(category)
-        print(40 * "-")
-        print(subcategory)
+
+    category = await services.get_category(article_meta.category, db_uri)
+    subcategory = await services.get_subcategory(
+        category, article_meta.subcategory, db_uri
+    )
+    tag_task = [services.get_tag(tag, db_uri) for tag in article_meta.tags]
+    tags = await asyncio.gather(*tag_task)
+    meta = models.Meta(
+        title=article_meta.title,
+        category=category,
+        subcategory=subcategory,
+        source=article_meta.source,
+        status=article_meta.status.value,
+        tags=tags,
+    )
+    await services.save_model_to_db(meta, db_uri)
