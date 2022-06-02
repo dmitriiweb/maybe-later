@@ -23,7 +23,7 @@ async def get_article(
         article.set_html(response.text)
         article.parse()
         meta = models.MetaModel(
-            title=article.title,
+            title=article.title.replace("/", "-"),
             source=url,
             category=category,
             subcategory=subcategory,
