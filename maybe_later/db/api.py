@@ -1,5 +1,7 @@
 import asyncio
 
+from typing import List
+
 from maybe_later.savers import MetaModel as ArticleMeta
 
 from . import models, services
@@ -23,3 +25,8 @@ async def add_new_meta(article_meta: ArticleMeta, db_uri: str):
         tags=tags,
     )
     await services.save_model_to_db(meta, db_uri)
+
+
+async def get_metas(db_uri) -> List[models.Meta]:
+    metas = await services.get_metas(db_uri)
+    return metas

@@ -64,3 +64,17 @@ async def update():
     async for meta in metas:
         print(f"Updating: {meta.title}")
         await api.add_new_meta(meta, app_config.db_uri),
+
+
+@main.group(help="Show articles, categories and tags")
+@utils.make_sync
+async def show():
+    pass
+
+
+@show.command(help="Show all articles")
+@utils.make_sync
+async def articles():
+    app_config = Config.from_file()
+    articles = await api.get_metas(app_config.db_uri)
+    print(articles)

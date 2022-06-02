@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
@@ -75,3 +75,13 @@ async def get_category(
     category = models.Category(name=category_name)
     await save_model_to_db(category, db_uri)
     return category
+
+
+async def get_metas(db_uri: str) -> List[models.Meta]:
+    engine = models.get_engine(db_uri)
+    async with AsyncSession(engine) as session:
+        stmt = select(models.Meta)
+        res = await session.execute(stmt)
+
+    metas = res.scalars().unique()
+    return list(metas)
