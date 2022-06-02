@@ -4,6 +4,7 @@ import httpx
 
 from newspaper import Article, Config
 
+from maybe_later._types import ArticleStatus
 from maybe_later.savers import models
 
 
@@ -21,12 +22,16 @@ async def get_article(
         article = Article(url, config=conf)
         article.set_html(response.text)
         article.parse()
-        return models.ArticleModel(
+        meta = models.MetaModel(
             title=article.title,
-            text=article.text,
             source=url,
             category=category,
             subcategory=subcategory,
             tags=tags,
+            status=ArticleStatus.UNREAD,
+        )
+        return models.ArticleModel(
+            text=article.text,
             article_html=article.article_html,
+            meta=meta,
         )

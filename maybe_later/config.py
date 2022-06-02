@@ -13,8 +13,8 @@ class Config:
     data_dir: Path
 
     @property
-    def sqlite_uri(self) -> str:
-        sqlite_path = str(self.data_dir.joinpath("db.sqlite").absolute())
+    def db_uri(self) -> str:
+        sqlite_path = str(self.data_dir.joinpath("db.sqlite3").absolute())
         return f"sqlite+aiosqlite:///{sqlite_path}"
 
     @classmethod

@@ -1,26 +1,40 @@
 from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from markdownify import markdownify as md
 
-
-class ArticleStatus(Enum):
-    NEW = auto()
+from maybe_later._types import ArticleStatus
 
 
 @dataclass
-class ArticleModel:
+class MetaModel:
     title: str
-    text: str
-    article_html: str
     source: str
     category: Optional[str]
     subcategory: Optional[str]
     tags: List[str] = field(default_factory=list)
-    status: ArticleStatus = ArticleStatus.NEW
+    status: ArticleStatus = ArticleStatus.UNREAD
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "title": self.title,
+            "source": self.source,
+            "category": self.category,
+            "subcategory": self.subcategory,
+            "tags": self.tags,
+            "status": self.status.value,
+        }
+
+
+@dataclass
+class ArticleModel:
+    meta: MetaModel
+    text: str
+    article_html: str
 
     def to_markdown(self) -> str:
         text = md(self.article_html)
-        text_with_meta = f"# {self.title}\n**Source:** {self.source}\n\n{text}"
+        text_with_meta = (
+            f"# {self.meta.title}\n**Source:** {self.meta.source}\n\n{text}"
+        )
         return text_with_meta
