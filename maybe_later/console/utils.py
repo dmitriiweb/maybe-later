@@ -7,6 +7,7 @@ from typing import AsyncGenerator, List, Optional, Tuple
 
 import aiofiles
 
+from maybe_later.db.models import Meta
 from maybe_later.savers import MetaModel
 
 
@@ -51,3 +52,18 @@ async def get_meta_from_json(json_file: Path) -> MetaModel:
         data = json.loads(text)
         meta = MetaModel.from_dict(data)
     return meta
+
+
+def generate_meta_output(metas: List[Meta]) -> str:
+    output = ""
+    for i in metas:
+        tags = [t.name for t in i.tags]
+        if len(tags) == 0:
+            tags_str = ""
+        else:
+            tags_str = ", ".join(tags)
+        print(i.category)
+        category = i.category.name if i.category else ""
+        row = f"{i.id} {i.title} {category} {tags_str}\n"
+        output += row
+    return output

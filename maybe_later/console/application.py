@@ -76,5 +76,6 @@ async def show():
 @utils.make_sync
 async def articles():
     app_config = Config.from_file()
-    articles = await api.get_metas(app_config.db_uri)
-    print(articles)
+    metas = await api.get_metas(app_config.db_uri)
+    output = utils.generate_meta_output(metas)
+    print(output)
