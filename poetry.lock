@@ -882,7 +882,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "7ae89a260f474016eabffc285330f2064d36982b5b615ade81a4ca491527ff5c"
+content-hash = "636beced7db54e706f3e032c04ef5b9effa4fb88acf110d0ceaf4a7e8eb76119"
 
 [metadata.files]
 aiofiles = [
