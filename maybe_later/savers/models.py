@@ -25,6 +25,10 @@ class MetaModel:
             "status": self.status.value,
         }
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "MetaModel":
+        return cls(**data)
+
 
 @dataclass
 class ArticleModel:

@@ -53,3 +53,14 @@ async def add(url: str, category: str, tags: str):
         await asyncio.gather(*saving_tasks)
     except IntegrityError:
         print(f'Article "{article.meta.title}" already exists in the database')
+
+
+@main.command(help="Recreate DB with articles' metas")
+@utils.make_sync
+async def update():
+    app_config = Config.from_file()
+    app_config.sqlite_db_path.unlink(missing_ok=True)
+    metas = utils.get_metas_from_folders(app_config.data_dir)
+    async for meta in metas:
+        print(meta)
+        print()
