@@ -26,8 +26,7 @@ class Meta(SQLModel, table=True):
 
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
     category: Optional["Category"] = Relationship(
-        back_populates="metas",
-        sa_relationship_kwargs={"lazy": "joined"},
+        back_populates="metas", sa_relationship_kwargs={"lazy": "joined"}
     )
 
     tags: List[Tag] = Relationship(

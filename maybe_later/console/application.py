@@ -1,15 +1,18 @@
 import asyncio
 
+from typing import Optional
+
 import click
 
 from sqlalchemy.exc import IntegrityError
+from tabulate import tabulate
 
 from maybe_later.config import Config
 from maybe_later.db import api
 from maybe_later.downloaders import get_article
 from maybe_later.savers import ArticleMdSaver as ArticleSaver
 
-from . import utils
+from . import outputs, utils
 
 
 @click.group()
@@ -64,9 +67,18 @@ async def show():
 
 
 @show.command(help="Show all articles")
+@click.option(
+    "-c",
+    "--categories",
+    type=str,
+    default=None,
+    required=False,
+    help="Comma-separated list of categories",
+)
 @utils.make_sync
-async def articles():
+async def articles(categories: Optional[str]):
+    show_categories = None if categories is None else categories.split(",")
     app_config = Config.from_file()
-    metas = await api.get_metas(app_config.db_uri)
-    output = utils.generate_meta_output(metas)
-    print(output)
+    metas = await api.get_metas(app_config.db_uri, show_categories)
+    output = outputs.generate_meta_output(metas)
+    print(tabulate(output, headers="firstrow"))

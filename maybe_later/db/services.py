@@ -56,3 +56,24 @@ async def get_metas(db_uri: str) -> List[models.Meta]:
 
     metas = res.scalars().unique()
     return list(metas)
+
+
+async def get_metas_by_categories(
+    category_names: List[str], db_uri: str
+) -> List[models.Meta]:
+    engine = models.get_engine(db_uri)
+    metas: List[models.Meta] = []
+    async with AsyncSession(engine) as session:
+        for i in category_names:
+            stmt = select(models.Category).where(models.Category.name == i)
+            res = await session.execute(stmt)
+            category: Optional[models.Category] = res.scalar()
+            if category is None:
+                continue
+            meta_stmt = select(models.Meta).where(
+                models.Meta.category_id == category.id
+            )
+            res = await session.execute(meta_stmt)
+            m = res.scalars().unique()
+            metas.extend(m)
+    return metas
