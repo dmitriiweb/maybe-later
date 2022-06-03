@@ -41,7 +41,10 @@ class Category(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     name: str = Field(sa_column_kwargs={"unique": True})
 
-    metas: List[Meta] = Relationship(back_populates="category")
+    metas: List[Meta] = Relationship(
+        back_populates="category",
+        sa_relationship_kwargs={"lazy": "joined"},
+    )
 
 
 async def init_db(db_url: str) -> None:

@@ -50,7 +50,6 @@ def generate_meta_output(metas: List[Meta]) -> str:
             tags_str = ""
         else:
             tags_str = ", ".join(tags)
-        print(i.category)
         category = i.category.name if i.category else ""
         row = f"{i.id} {i.title} {category} {tags_str}\n"
         output += row
