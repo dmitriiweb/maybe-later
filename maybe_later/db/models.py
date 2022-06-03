@@ -22,23 +22,26 @@ class Meta(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     title: str = Field(sa_column_kwargs={"unique": True})
     source: str
-    category_id: Optional[int] = Relationship(
-        back_populates="meta",
-    )
-    meta: Optional["Category"] = Relationship(
-        back_populates="category",
-    )
     status: int
+
+    category_id: Optional[int] = Field(default=None, foreign_key="category.id")
+    category: Optional["Category"] = Relationship(
+        back_populates="metas",
+        sa_relationship_kwargs={"lazy": "joined"},
+    )
+
+    tags: List[Tag] = Relationship(
+        back_populates="metas",
+        link_model=MetaTagLink,
+        sa_relationship_kwargs={"lazy": "joined"},
+    )
 
 
 class Category(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     name: str = Field(sa_column_kwargs={"unique": True})
 
-    metas: List[Meta] = Relationship(
-        back_populates="category",
-        sa_relationship_kwargs={"lazy": "joined"},
-    )
+    metas: List[Meta] = Relationship(back_populates="category")
 
 
 async def init_db(db_url: str) -> None:
