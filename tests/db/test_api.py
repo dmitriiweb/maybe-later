@@ -22,12 +22,12 @@ async def test_add_new_meta(add_new_meta_to_db, base_dir, article):
     assert "Test tag" in meta_tags
 
 
-# async def test_get_metas(add_new_meta_to_db, base_dir, article):
-#     sqlite_path = str(base_dir.joinpath("db.sqlite3").absolute())
-#     connection_string = f"sqlite+aiosqlite:///{sqlite_path}"
-#
-#     metas = await api.get_metas(connection_string)
-#     meta = metas[0]
-#
-#     assert len(metas) == 1
-#     assert meta.title == article.meta.title
+async def test_get_metas(add_new_meta_to_db, base_dir, article):
+    sqlite_path = str(base_dir.joinpath("db.sqlite3").absolute())
+    connection_string = f"sqlite+aiosqlite:///{sqlite_path}"
+
+    metas = await api.get_metas(connection_string)
+    meta = metas[0]
+
+    assert len(metas) == 1
+    assert meta.title == article.meta.title

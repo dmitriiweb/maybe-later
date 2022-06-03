@@ -3,7 +3,7 @@ import functools
 import json
 
 from pathlib import Path
-from typing import AsyncGenerator, List, Optional, Tuple
+from typing import AsyncGenerator, List
 
 import aiofiles
 
