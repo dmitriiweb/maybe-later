@@ -20,7 +20,8 @@ def string_shorter(text: str, max_length: int = 50) -> str:
 
 
 def color_text(text: str, color: str) -> str:
-    return colored(text, color)
+    res: str = colored(text, color)
+    return res
 
 
 def color_factory(status: ArticleStatus):
