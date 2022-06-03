@@ -8,9 +8,7 @@ from maybe_later._types import ArticleStatus
 from maybe_later.savers import models
 
 
-async def get_article(
-    url: str, category: Optional[str], subcategory: Optional[str], tags: List[str]
-) -> models.ArticleModel:
+async def get_article(url: str, category: str, tags: List[str]) -> models.ArticleModel:
     print(f"Getting article from URL: {url}")
     async with httpx.AsyncClient() as client:
         response = await client.get(
@@ -26,7 +24,6 @@ async def get_article(
             title=article.title.replace("/", "-"),
             source=url,
             category=category,
-            subcategory=subcategory,
             tags=tags,
             status=ArticleStatus.UNREAD,
         )

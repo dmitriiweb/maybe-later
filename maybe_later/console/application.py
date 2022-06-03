@@ -20,13 +20,7 @@ async def main():
 
 @main.command(help="Download an article from a given URL")
 @click.option("-u", "--url", type=str, help="Article's URL")
-@click.option(
-    "-c",
-    "--category",
-    type=str,
-    default="",
-    help="Category and subcategory for the article. Could be in the form of 'category/subcategory' or just 'category'",
-)
+@click.option("-c", "--category", type=str, default="", help="Category for the article")
 @click.option(
     "-t",
     "--tags",
@@ -36,11 +30,8 @@ async def main():
 )
 @utils.make_sync
 async def add(url: str, category: str, tags: str):
-    main_category, subcategory = utils.get_categories(category)
     article_tags = utils.get_tags(tags)
-    article = await get_article(
-        url, category=main_category, subcategory=subcategory, tags=article_tags
-    )
+    article = await get_article(url, category=category, tags=article_tags)
     app_config = Config.from_file()
     article_saver = ArticleSaver(article, app_config)
 

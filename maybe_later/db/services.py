@@ -11,7 +11,7 @@ SelectOfScalar.inherit_cache = True  # type: ignore
 Select.inherit_cache = True  # type: ignore
 
 ModelsWithName = Union[models.Tag, models.Category]
-NonTagModel = Union[models.Category, models.SubCategory, models.Meta]
+NonTagModel = Union[models.Category, models.Meta]
 
 
 async def save_model_to_db(model, db_uri: str) -> None:
@@ -33,31 +33,6 @@ async def get_tag(tag_name: str, db_uri: str) -> models.Tag:
     tag = models.Tag(name=tag_name)
     await save_model_to_db(tag, db_uri)
     return tag
-
-
-async def get_subcategory(
-    category: Optional[models.Category],
-    sub_category_name: Optional[str],
-    db_uri: str,
-) -> Optional[models.SubCategory]:
-    if sub_category_name is None or category is None:
-        return None
-    engine = models.get_engine(db_uri)
-    async with AsyncSession(engine) as session:
-        stmt = (
-            select(models.SubCategory)
-            .where(models.SubCategory.category_id == category.id)
-            .where(models.SubCategory.name == sub_category_name)
-        )
-
-        res = await session.execute(stmt)
-        subcategory: Optional[models.SubCategory] = res.scalar()
-    if subcategory is not None:
-        return subcategory
-    subcategory = models.SubCategory(name=sub_category_name, category_id=category.id)
-    await save_model_to_db(subcategory, db_uri)
-    category.subcategories.append(subcategory)
-    return subcategory
 
 
 async def get_category(

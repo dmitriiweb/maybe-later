@@ -33,7 +33,6 @@ def article(article_html: str) -> ArticleModel:
         title="Test title",
         source="Test source",
         category="Test category",
-        subcategory="Test subcategory",
         tags=["Test tag"],
         status=ArticleStatus.UNREAD,
     )
