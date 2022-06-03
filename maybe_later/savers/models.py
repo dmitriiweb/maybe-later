@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from markdownify import markdownify as md
 
@@ -10,7 +10,7 @@ from maybe_later._types import ArticleStatus
 class MetaModel:
     title: str
     source: str
-    category: Optional[str]
+    category: str
     tags: List[str] = field(default_factory=list)
     status: ArticleStatus = ArticleStatus.UNREAD
 

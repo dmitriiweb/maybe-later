@@ -35,7 +35,7 @@ async def get_tag(tag_name: str, db_uri: str) -> models.Tag:
     return tag
 
 
-async def get_category(category_name: str, db_uri: str) -> Optional[models.Category]:
+async def get_category(category_name: str, db_uri: str) -> models.Category:
     engine = models.get_engine(db_uri)
     async with AsyncSession(engine) as session:
         stmt = select(models.Category).where(models.Category.name == category_name)
