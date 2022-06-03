@@ -33,7 +33,6 @@ def article(article_html: str) -> ArticleModel:
         title="Test title",
         source="Test source",
         category="Test category",
-        subcategory="Test subcategory",
         tags=["Test tag"],
         status=ArticleStatus.UNREAD,
     )
@@ -48,12 +47,13 @@ def article_md_saver(article: ArticleModel, config: Config) -> ArticleMdSaver:
 @pytest.fixture()
 async def add_new_meta_to_db(article: ArticleModel, config: Config, base_dir: Path):
     db_file_name = "db.sqlite3"
-    fb_file_path = base_dir.joinpath(db_file_name)
+    db_file_path = base_dir.joinpath(db_file_name)
     config.data_dir = base_dir
+    db_file_path.unlink(missing_ok=True)
 
     await init_db(config.db_uri)
     await add_new_meta(article.meta, config.db_uri)
 
     yield
 
-    fb_file_path.unlink()
+    db_file_path.unlink(missing_ok=True)

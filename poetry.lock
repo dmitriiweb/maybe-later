@@ -748,6 +748,25 @@ SQLAlchemy = ">=1.4.17,<1.5.0"
 sqlalchemy2-stubs = "*"
 
 [[package]]
+name = "tabulate"
+version = "0.8.9"
+description = "Pretty-print tabular data"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
+name = "termcolor"
+version = "1.1.0"
+description = "ANSII Color formatting for output in terminal."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "tinysegmenter"
 version = "0.3"
 description = "Very compact Japanese tokenizer"
@@ -841,6 +860,22 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "types-tabulate"
+version = "0.8.9"
+description = "Typing stubs for tabulate"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-termcolor"
+version = "1.1.4"
+description = "Typing stubs for termcolor"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.2.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -882,7 +917,7 @@ testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "636beced7db54e706f3e032c04ef5b9effa4fb88acf110d0ceaf4a7e8eb76119"
+content-hash = "f2c9be1eb36d31d8d492ad134a7e78798873d479c89823b11c3124a8ba88d224"
 
 [metadata.files]
 aiofiles = [
@@ -1526,6 +1561,13 @@ sqlmodel = [
     {file = "sqlmodel-0.0.6-py3-none-any.whl", hash = "sha256:c5fd8719e09da348cd32ce2a5b6a44f289d3029fa8f1c9818229b6f34f1201b4"},
     {file = "sqlmodel-0.0.6.tar.gz", hash = "sha256:3b4f966b9671b24d85529d274e6c4dbc7753b468e35d2d6a40bd75cad1f66813"},
 ]
+tabulate = [
+    {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
+    {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
+]
+termcolor = [
+    {file = "termcolor-1.1.0.tar.gz", hash = "sha256:1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"},
+]
 tinysegmenter = [
     {file = "tinysegmenter-0.3.tar.gz", hash = "sha256:ed1f6d2e806a4758a73be589754384cbadadc7e1a414c81a166fc9adf2d40c6d"},
 ]
@@ -1556,6 +1598,14 @@ types-aiofiles = [
 types-pyyaml = [
     {file = "types-PyYAML-6.0.7.tar.gz", hash = "sha256:59480cf44595d836aaae050f35e3c39f197f3a833679ef3978d97aa9f2fb7def"},
     {file = "types_PyYAML-6.0.7-py3-none-any.whl", hash = "sha256:7b273a34f32af9910cf9405728c9d2ad3afc4be63e4048091a1a73d76681fe67"},
+]
+types-tabulate = [
+    {file = "types-tabulate-0.8.9.tar.gz", hash = "sha256:2fc3fa4fe1853ac987cf50e8d4599e3fe446dd53064fe86a46a407a98e9fc04f"},
+    {file = "types_tabulate-0.8.9-py3-none-any.whl", hash = "sha256:7971ed0cd40454eb18d82c01e2f18bcd09ca23cc9eb901c62d2b04e5d1f57f84"},
+]
+types-termcolor = [
+    {file = "types-termcolor-1.1.4.tar.gz", hash = "sha256:4986dea39b82c9b78714154ac88033d4e225e3c06e0386491f74003c9071e541"},
+    {file = "types_termcolor-1.1.4-py3-none-any.whl", hash = "sha256:becba28967a8792221f202c6ba14c2ae236ef90519dd14aaefe8af54d94639e0"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.2.0-py3-none-any.whl", hash = "sha256:6657594ee297170d19f67d55c05852a874e7eb634f4f753dbd667855e07c1708"},

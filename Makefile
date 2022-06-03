@@ -6,9 +6,11 @@ test:
 	black maybe_later tests/
 	isort maybe_later tests/
 
-.PHONY: mypy
-mypy:
+.PHONY: linters
+linters:
 	mypy maybe_later --implicit-reexport
+	black maybe_later tests/
+	isort maybe_later tests/
 
 .PHONY: publish
 publish:

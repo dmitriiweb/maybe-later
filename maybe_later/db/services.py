@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
@@ -11,7 +11,7 @@ SelectOfScalar.inherit_cache = True  # type: ignore
 Select.inherit_cache = True  # type: ignore
 
 ModelsWithName = Union[models.Tag, models.Category]
-NonTagModel = Union[models.Category, models.SubCategory, models.Meta]
+NonTagModel = Union[models.Category, models.Meta]
 
 
 async def save_model_to_db(model, db_uri: str) -> None:
@@ -35,36 +35,7 @@ async def get_tag(tag_name: str, db_uri: str) -> models.Tag:
     return tag
 
 
-async def get_subcategory(
-    category: Optional[models.Category],
-    sub_category_name: Optional[str],
-    db_uri: str,
-) -> Optional[models.SubCategory]:
-    if sub_category_name is None or category is None:
-        return None
-    engine = models.get_engine(db_uri)
-    async with AsyncSession(engine) as session:
-        stmt = (
-            select(models.SubCategory)
-            .where(models.SubCategory.category_id == category.id)
-            .where(models.SubCategory.name == sub_category_name)
-        )
-
-        res = await session.execute(stmt)
-        subcategory: Optional[models.SubCategory] = res.scalar()
-    if subcategory is not None:
-        return subcategory
-    subcategory = models.SubCategory(name=sub_category_name, category_id=category.id)
-    await save_model_to_db(subcategory, db_uri)
-    category.subcategories.append(subcategory)
-    return subcategory
-
-
-async def get_category(
-    category_name: Optional[str], db_uri: str
-) -> Optional[models.Category]:
-    if category_name is None:
-        return None
+async def get_category(category_name: str, db_uri: str) -> models.Category:
     engine = models.get_engine(db_uri)
     async with AsyncSession(engine) as session:
         stmt = select(models.Category).where(models.Category.name == category_name)
@@ -75,3 +46,34 @@ async def get_category(
     category = models.Category(name=category_name)
     await save_model_to_db(category, db_uri)
     return category
+
+
+async def get_metas(db_uri: str) -> List[models.Meta]:
+    engine = models.get_engine(db_uri)
+    async with AsyncSession(engine) as session:
+        stmt = select(models.Meta)
+        res = await session.execute(stmt)
+
+    metas = res.scalars().unique()
+    return list(metas)
+
+
+async def get_metas_by_categories(
+    category_names: List[str], db_uri: str
+) -> List[models.Meta]:
+    engine = models.get_engine(db_uri)
+    metas: List[models.Meta] = []
+    async with AsyncSession(engine) as session:
+        for i in category_names:
+            stmt = select(models.Category).where(models.Category.name == i)
+            res = await session.execute(stmt)
+            category: Optional[models.Category] = res.scalar()
+            if category is None:
+                continue
+            meta_stmt = select(models.Meta).where(
+                models.Meta.category_id == category.id
+            )
+            res = await session.execute(meta_stmt)
+            m = res.scalars().unique()
+            metas.extend(m)
+    return metas

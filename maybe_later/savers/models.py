@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from markdownify import markdownify as md
 
@@ -10,8 +10,7 @@ from maybe_later._types import ArticleStatus
 class MetaModel:
     title: str
     source: str
-    category: Optional[str]
-    subcategory: Optional[str]
+    category: str
     tags: List[str] = field(default_factory=list)
     status: ArticleStatus = ArticleStatus.UNREAD
 
@@ -20,7 +19,6 @@ class MetaModel:
             "title": self.title,
             "source": self.source,
             "category": self.category,
-            "subcategory": self.subcategory,
             "tags": self.tags,
             "status": self.status.value,
         }
@@ -31,7 +29,6 @@ class MetaModel:
             title=data["title"],
             source=data["source"],
             category=data["category"],
-            subcategory=data["subcategory"],
             tags=data["tags"],
             status=ArticleStatus(data["status"]),
         )

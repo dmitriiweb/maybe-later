@@ -3,7 +3,7 @@ import functools
 import json
 
 from pathlib import Path
-from typing import AsyncGenerator, List, Optional, Tuple
+from typing import AsyncGenerator, List
 
 import aiofiles
 
@@ -16,18 +16,6 @@ def make_sync(func):
         return asyncio.run(func(*args, **kwargs))
 
     return wrapper
-
-
-def get_categories(raw_categories: str) -> Tuple[Optional[str], Optional[str]]:
-    raw_categories = raw_categories.strip()
-    cats = raw_categories.split("/")
-    filtered_cats = [cat.strip() if cat != "" else None for cat in cats]
-    total_cats = len(filtered_cats)
-    if total_cats == 0:
-        return None, None
-    elif total_cats == 1:
-        return filtered_cats[0], None
-    return filtered_cats[0], filtered_cats[1]
 
 
 def get_tags(raw_tags: str) -> List[str]:

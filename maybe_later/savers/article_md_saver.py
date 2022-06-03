@@ -11,11 +11,9 @@ class ArticleMdSaver(ArticleSaver):
     @property
     def folder_path(self) -> Path:
         folder_path = self.app_config.data_dir
-        if self.article.meta.category:
-            folder_path = folder_path.joinpath(self.article.meta.category)
-            if self.article.meta.subcategory:
-                folder_path = folder_path.joinpath(self.article.meta.subcategory)
-        folder_path = folder_path.joinpath(self.article.meta.title)
+        folder_path = folder_path.joinpath(
+            self.article.meta.category, self.article.meta.title
+        )
         return folder_path
 
     @property

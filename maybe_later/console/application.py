@@ -1,5 +1,7 @@
 import asyncio
 
+from typing import Optional
+
 import click
 
 from sqlalchemy.exc import IntegrityError
@@ -9,7 +11,7 @@ from maybe_later.db import api
 from maybe_later.downloaders import get_article
 from maybe_later.savers import ArticleMdSaver as ArticleSaver
 
-from . import utils
+from . import outputs, utils
 
 
 @click.group()
@@ -20,13 +22,7 @@ async def main():
 
 @main.command(help="Download an article from a given URL")
 @click.option("-u", "--url", type=str, help="Article's URL")
-@click.option(
-    "-c",
-    "--category",
-    type=str,
-    default="",
-    help="Category and subcategory for the article. Could be in the form of 'category/subcategory' or just 'category'",
-)
+@click.option("-c", "--category", type=str, default="", help="Category for the article")
 @click.option(
     "-t",
     "--tags",
@@ -36,11 +32,8 @@ async def main():
 )
 @utils.make_sync
 async def add(url: str, category: str, tags: str):
-    main_category, subcategory = utils.get_categories(category)
     article_tags = utils.get_tags(tags)
-    article = await get_article(
-        url, category=main_category, subcategory=subcategory, tags=article_tags
-    )
+    article = await get_article(url, category=category, tags=article_tags)
     app_config = Config.from_file()
     article_saver = ArticleSaver(article, app_config)
 
@@ -64,3 +57,36 @@ async def update():
     async for meta in metas:
         print(f"Updating: {meta.title}")
         await api.add_new_meta(meta, app_config.db_uri),
+
+
+@main.group(help="Show articles, categories and tags")
+@utils.make_sync
+async def show():
+    pass
+
+
+@show.command(help="Show all articles")
+@click.option(
+    "-c",
+    "--categories",
+    type=str,
+    default=None,
+    required=False,
+    help="Comma-separated list of categories",
+)
+@click.option(
+    "-t",
+    "--tags",
+    type=str,
+    default=None,
+    required=False,
+    help="Comma-separated list of tags",
+)
+@utils.make_sync
+async def articles(categories: Optional[str], tags: Optional[str]):
+    show_categories = None if categories is None else categories.split(",")
+    show_tags = None if tags is None else tags.split(",")
+    app_config = Config.from_file()
+    metas = await api.get_metas(app_config.db_uri, show_categories, show_tags)
+    output = outputs.generate_meta_output(metas)
+    outputs.print_output(output)
