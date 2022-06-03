@@ -5,7 +5,6 @@ from typing import Optional
 import click
 
 from sqlalchemy.exc import IntegrityError
-from tabulate import tabulate
 
 from maybe_later.config import Config
 from maybe_later.db import api
@@ -75,10 +74,19 @@ async def show():
     required=False,
     help="Comma-separated list of categories",
 )
+@click.option(
+    "-t",
+    "--tags",
+    type=str,
+    default=None,
+    required=False,
+    help="Comma-separated list of tags",
+)
 @utils.make_sync
-async def articles(categories: Optional[str]):
+async def articles(categories: Optional[str], tags: Optional[str]):
     show_categories = None if categories is None else categories.split(",")
+    show_tags = None if tags is None else tags.split(",")
     app_config = Config.from_file()
-    metas = await api.get_metas(app_config.db_uri, show_categories)
+    metas = await api.get_metas(app_config.db_uri, show_categories, show_tags)
     output = outputs.generate_meta_output(metas)
-    print(tabulate(output, headers="firstrow"))
+    outputs.print_output(output)

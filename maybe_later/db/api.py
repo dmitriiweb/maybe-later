@@ -24,10 +24,17 @@ async def add_new_meta(article_meta: ArticleMeta, db_uri: str):
 
 
 async def get_metas(
-    db_uri, categories: Optional[List[str]] = None
+    db_uri, categories: Optional[List[str]] = None, tags: Optional[List[str]] = None
 ) -> List[models.Meta]:
     if categories is None:
         metas = await services.get_metas(db_uri)
     else:
         metas = await services.get_metas_by_categories(categories, db_uri)
-    return metas
+    if tags is None:
+        return metas
+    filtered_metas = []
+    for meta in metas:
+        tags_names = [tag.name for tag in meta.tags]
+        if any(tag in tags_names for tag in tags):
+            filtered_metas.append(meta)
+    return filtered_metas
